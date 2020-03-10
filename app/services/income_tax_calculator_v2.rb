@@ -1,36 +1,40 @@
-class IncomeTaxCalculator
+class IncomeTaxCalculatorV2 < IncomeTaxCalculator
   def initialize(incomes)
-    @incomes = incomes
-    @verbose = true
-    @brackets = Rails.application.config_for(:brackets)
-    @brackets.transform_keys! { |key| key.to_s.to_i }
-    @taxes = []
+    super
+    @calculated_brackets = {}
+    calculate_bracket_increments
+  end
+
+  def calculate_bracket_increments
+    taxed_amount = 0
+    accumulated_tax = 0
+    @brackets.each do |bracket|
+      @calculated_brackets[bracket[0]] = {
+        tax: bracket[1],
+        previous_bracket_total_tax: accumulated_tax,
+        already_taxed_amount: taxed_amount
+      }
+
+      bracket_tax = ((bracket[0] - taxed_amount) * bracket[1]) / 100
+      taxed_amount = bracket[0]
+      accumulated_tax += bracket_tax
+    end
+    @calculated_brackets.freeze
   end
 
   def call
     @incomes.each do |income_total|
-      tax_total = 0
-      taxed_income = 0
       puts "Income: #{income_total}" if @verbose
-      @brackets.each_with_index do |bracket, index|
-        if income_total > bracket[0] && index != @brackets.size - 1
-          amount_to_tax = (bracket[0] - taxed_income)
-        else
-          amount_to_tax = (income_total - taxed_income)
-        end
-        bracket_tax = (amount_to_tax * bracket[1][:tax]) / 100
-        tax_total += bracket_tax
-        taxed_income += amount_to_tax
+      bracket = @calculated_brackets.find { |bracket| bracket[0] > income_total }
+      bracket ||= [income_total, @calculated_brackets[@calculated_brackets.keys.last]]
 
-        puts "-- Bracket #{bracket[0]}" if @verbose
-        puts "---> $#{amount_to_tax} % #{bracket[1][:tax]} , -> $#{bracket_tax}" if @verbose
+      bracket_tax = ((income_total - bracket[1][:already_taxed_amount]) * bracket[1][:tax]) / 100
+      tax_total = bracket[1][:previous_bracket_total_tax] + bracket_tax
 
-        break if taxed_income == income_total
-      end
-      puts "-> TOTAL tax: $#{tax_total}"
-      @taxes << { income: income_total, tax: tax_total } if @verbose
+      puts "-> TOTAL tax: $#{tax_total}" if @verbose
+
+      @taxes << { income: income_total, tax: tax_total }
     end
-
     @taxes
   end
 end

@@ -18,17 +18,17 @@ class IncomeTaxCalculator
         else
           amount_to_tax = (income_total - taxed_income)
         end
-        bracket_tax = (amount_to_tax * bracket[1][:tax]) / 100
+        bracket_tax = (amount_to_tax * bracket[1]) / 100
         tax_total += bracket_tax
         taxed_income += amount_to_tax
 
-        puts "-- Bracket #{bracket[0]}" if @verbose
-        puts "---> $#{amount_to_tax} % #{bracket[1][:tax]} , -> $#{bracket_tax}" if @verbose
+        # puts "-- Bracket #{bracket[0]}" if @verbose
+        # puts "---> $#{amount_to_tax} % #{bracket[1]} , -> $#{bracket_tax}" if @verbose
 
         break if taxed_income == income_total
       end
-      puts "-> TOTAL tax: $#{tax_total}"
-      @taxes << {income: income_total, tax: tax_total} if @verbose
+      puts "-> TOTAL tax: $#{tax_total}" if @verbose
+      @taxes << { income: income_total, tax: tax_total }
     end
 
     @taxes

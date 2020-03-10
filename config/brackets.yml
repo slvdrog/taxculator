@@ -3,11 +3,7 @@
 #  bracket_top: tax %.
 
 development:
-  "9999":
-    tax: 0
-  "19999": 
-    tax: 10
-  "49999":
-    tax: 20
-  "last":
-    tax: 30
+  "9999": 0
+  "19999": 10
+  "49999": 20
+  "last": 30
