@@ -6,4 +6,10 @@ development:
   "9999": 0
   "19999": 10
   "49999": 20
+  "last": 30 # the last bracket bracket_top gets ignored
+
+test: #changing this will break specs
+  "9999": 0
+  "19999": 10
+  "49999": 20
   "last": 30

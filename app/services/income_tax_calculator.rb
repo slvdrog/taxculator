@@ -1,7 +1,7 @@
 class IncomeTaxCalculator
   def initialize(incomes)
     @incomes = incomes
-    @verbose = true
+    @verbose = Rails.env.development?
     @brackets = Rails.application.config_for(:brackets)
     @brackets.transform_keys! { |key| key.to_s.to_i }
     @taxes = []

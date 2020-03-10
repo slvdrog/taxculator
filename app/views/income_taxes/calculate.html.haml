@@ -1,0 +1,13 @@
+%p
+  %table
+    %tr
+      %th
+        Income
+      %th
+        Tax
+    - @results.each do |result|
+      %tr
+        %td
+          = result[:income]
+        %td
+          = result[:tax]
