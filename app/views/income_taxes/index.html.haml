@@ -1,5 +1,5 @@
 %p
   = form_with do
-    = text_field_tag 'incomes'
+    = text_area_tag 'incomes', nil, placeholder: "List of incomes\nOne per line\n20000\n120000.50", rows: 10, cols: 15
     = submit_tag 'calculate'
   

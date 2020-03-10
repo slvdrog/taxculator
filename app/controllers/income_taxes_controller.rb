@@ -5,6 +5,12 @@ class IncomeTaxesController < ApplicationController
   end
 
   def calculate
-    p 'not yet'
+    IncomeTaxCalculator.new(income_params).call
+  end
+
+  private
+
+  def income_params
+    params.require(:incomes).chomp.split().map{|e| e.to_f}
   end
 end

@@ -28,7 +28,7 @@ class IncomeTaxCalculator
         break if taxed_income == income_total
       end
       puts "-> TOTAL tax: $#{tax_total}"
-      @taxes << {income: income_total, tax: tax_total} if @verbose
+      @taxes << { income: income_total, tax: tax_total } if @verbose
     end
 
     @taxes
